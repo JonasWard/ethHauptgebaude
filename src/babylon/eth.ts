@@ -170,7 +170,7 @@ const loftProfiles = (positions: Vector3[][], close: boolean = true): MeshType =
   return mesh;
 };
 
-export const ethMesh = (): MeshType => {
+export const ethMeshRhino = (): MeshType => {
   const profiles: Vector3[][] = [];
 
   const divs = 24;
@@ -180,6 +180,24 @@ export const ethMesh = (): MeshType => {
     const xDir = new Vector3(Math.cos(angle), 0, Math.sin(angle));
     const zDir = new Vector3(0, 1, 0);
     profiles.push(mainProfileFromRhino(xDir, zDir));
+  }
+
+  const mesh = loftProfiles(profiles, true);
+  invertFaces(mesh);
+
+  return mesh;
+};
+
+export const ethMesh = (): MeshType => {
+  const profiles: Vector3[][] = [];
+
+  const divs = 24;
+  const angleStep = (2 * Math.PI) / divs;
+  for (let i = 0; i < divs; i++) {
+    const angle = angleStep * i;
+    const xDir = new Vector3(Math.cos(angle), 0, Math.sin(angle));
+    const zDir = new Vector3(0, 1, 0);
+    profiles.push(mainProfile(xDir, zDir));
   }
 
   const mesh = loftProfiles(profiles, true);
