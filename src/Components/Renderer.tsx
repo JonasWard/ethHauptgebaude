@@ -10,7 +10,11 @@ const onSceneReady = (scene: Scene, canvas: HTMLCanvasElement) => {
   const light = new HemisphericLight('ambient', new Vector3(0, 1, 0), scene);
   scene.clearColor = new Color4(1, 0.9, 0.9, 1);
   light.intensity = 1.5;
-  const camera: ArcRotateCamera = new ArcRotateCamera('Camera', Math.PI / 2, Math.PI / 2, 55, Vector3.Zero(), scene);
+  const camera: ArcRotateCamera = new ArcRotateCamera('Camera', Math.PI / 4, Math.PI / 4, 1000, new Vector3(0, 200, 0), scene);
+
+  camera.wheelPrecision = 10;
+  camera.inertia = 0.1;
+
   camera.attachControl(canvas, true);
   const pipeline = new DefaultRenderingPipeline('default', true, scene, [camera]);
   pipeline.samples = 1;
