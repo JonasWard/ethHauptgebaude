@@ -23,10 +23,10 @@ const rightSideBarButton = {
 };
 
 export interface IGeometrySidebarProps {
-  setPositions?: (vs: Vector3[]) => void;
+  setMesh?: (vs: MeshType) => void;
 }
 
-const GeometrySidebar: React.FC<IGeometrySidebarProps> = ({ setPositions }) => {
+const GeometrySidebar: React.FC<IGeometrySidebarProps> = ({ setMesh }) => {
   const [isVisible, setIsVisible] = React.useState(true);
 
   const visibleStyle: React.CSSProperties = {
@@ -67,7 +67,6 @@ const GeometrySidebar: React.FC<IGeometrySidebarProps> = ({ setPositions }) => {
       </button>
 
       <div style={isVisible ? visibleStyle : invisibleStyle}>
-        <Button style={rightSidebarStyle} onClick={() => setPositions([])} />
       </div>
     </>
   );
