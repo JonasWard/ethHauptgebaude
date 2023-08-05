@@ -1,3 +1,9 @@
+import { Vector3 } from '@babylonjs/core';
+import { MeshType } from '../enums';
+import { invertFaces } from './geometry/makeMesh';
+
+const arcPrecisionHigh = 100;
+
 const interpolateArc = (o: Vector3, xDir: Vector3, yDir: Vector3): Vector3[] => {
   const aStep = (Math.PI * 0.5) / arcPrecisionHigh;
   const positions: Vector3[] = [];
