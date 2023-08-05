@@ -3,6 +3,8 @@ import * as React from 'react';
 import GeometrySidebar from './GeometryGeneration/GeometrySidebar';
 import SceneComponent from './Scene';
 import { MeshType } from '../enums';
+import { addMeshToScene } from '../babylon/geometry/makeMesh';
+import { ethMesh } from '../babylon/eth';
 
 export const CUSTOM_SHADER_NAME = 'customShaderName';
 
@@ -18,6 +20,8 @@ const onSceneReady = (scene: Scene, canvas: HTMLCanvasElement) => {
   camera.attachControl(canvas, true);
   const pipeline = new DefaultRenderingPipeline('default', true, scene, [camera]);
   pipeline.samples = 1;
+
+  addMeshToScene(ethMesh(), scene);
 
   scene.registerBeforeRender(() => {});
 };
