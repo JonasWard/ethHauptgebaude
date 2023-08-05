@@ -1,6 +1,7 @@
 import { Vector3 } from '@babylonjs/core';
 import { Button } from 'antd';
 import * as React from 'react';
+import { EXAMPLE_CUBE, EXAMPLE_QUAD, EXAMPLE_TRIANGLE, MeshType } from '../../enums';
 
 const width = 150;
 const buttonMargin = 2;
@@ -67,6 +68,15 @@ const GeometrySidebar: React.FC<IGeometrySidebarProps> = ({ setMesh }) => {
       </button>
 
       <div style={isVisible ? visibleStyle : invisibleStyle}>
+        <Button style={rightSidebarStyle} onClick={() => setMesh(EXAMPLE_TRIANGLE)}>
+          add tri
+        </Button>
+        <Button style={rightSidebarStyle} onClick={() => setMesh(EXAMPLE_QUAD)}>
+          add quad
+        </Button>
+        <Button style={rightSidebarStyle} onClick={() => setMesh(EXAMPLE_CUBE)}>
+          add cube
+        </Button>
       </div>
     </>
   );
