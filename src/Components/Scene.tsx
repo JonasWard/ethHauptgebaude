@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { Engine, Scene, StandardMaterial } from '@babylonjs/core';
+import { Engine, Scene } from '@babylonjs/core';
 import * as React from 'react';
 import shaders from '../babylon/shaders/shaders';
-import { ParallelTransportMesh } from '../babylon/geometry/parallelTransportFrames';
 import { addMeshToScene } from '../babylon/geometry/makeMesh';
 
 const materialStates = Object.keys(shaders);
