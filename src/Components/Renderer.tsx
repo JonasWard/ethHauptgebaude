@@ -4,7 +4,7 @@ import GeometrySidebar from './GeometryGeneration/GeometrySidebar';
 import SceneComponent from './Scene';
 import { MeshType } from '../enums';
 import { addMeshToScene } from '../babylon/geometry/makeMesh';
-import { ethMesh } from '../babylon/eth';
+import { ethMeshRhino } from '../babylon/eth';
 
 export const CUSTOM_SHADER_NAME = 'customShaderName';
 
@@ -21,7 +21,7 @@ const onSceneReady = (scene: Scene, canvas: HTMLCanvasElement) => {
   const pipeline = new DefaultRenderingPipeline('default', true, scene, [camera]);
   pipeline.samples = 1;
 
-  addMeshToScene(ethMesh(), scene);
+  addMeshToScene(ethMeshRhino(), scene);
 
   scene.registerBeforeRender(() => {});
 };
