@@ -3,38 +3,22 @@ import { Engine, Scene, StandardMaterial } from '@babylonjs/core';
 import * as React from 'react';
 import shaders from '../babylon/shaders/shaders';
 import { ParallelTransportMesh } from '../babylon/geometry/parallelTransportFrames';
+import { addMeshToScene } from '../babylon/geometry/makeMesh';
 
 const materialStates = Object.keys(shaders);
 
-export default ({
-  antialias,
-  engineOptions,
-  adaptToDeviceRatio,
-  sceneOptions,
-  onRender,
-  onSceneReady,
-  positions,
-  ...rest
-}) => {
-  const reactCanvas: React.MutableRefObject<null | HTMLCanvasElement> =
-    useRef(null);
+export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, mesh, ...rest }) => {
+  const reactCanvas: React.MutableRefObject<null | HTMLCanvasElement> = useRef(null);
 
   const [scene, setScene] = React.useState(new Scene(new Engine(null)));
 
   useEffect(() => {
-    if (scene.isReady && positions?.length > 0) {
+    if (scene.isReady && mesh?.positions?.length > 0) {
       if (scene?.geometries) for (const geo of scene?.geometries) geo.dispose();
 
-    new ParallelTransportMesh(
-      positions,
-      0.5,
-      8,
-      new StandardMaterial('standard', scene),
-      2,
-      scene
-    );
+      addMeshToScene(mesh, scene);
     }
-  }, [positions, scene.isReady]);
+  }, [mesh, scene.isReady]);
 
   // set up basic engine and scene
   useEffect(() => {
@@ -52,12 +36,7 @@ export default ({
 
     if (!canvas) return;
 
-    const engine = new Engine(
-      canvas,
-      antialias,
-      engineOptions,
-      adaptToDeviceRatio
-    );
+    const engine = new Engine(canvas, antialias, engineOptions, adaptToDeviceRatio);
     const scene = new Scene(engine, sceneOptions);
 
     if (scene.isReady()) {
@@ -88,14 +67,7 @@ export default ({
         window.removeEventListener('resize', resize);
       }
     };
-  }, [
-    antialias,
-    engineOptions,
-    adaptToDeviceRatio,
-    sceneOptions,
-    onRender,
-    onSceneReady,
-  ]);
+  }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady]);
 
   return (
     <>

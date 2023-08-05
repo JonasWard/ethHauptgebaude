@@ -2,6 +2,7 @@ import { ArcRotateCamera, Color4, HemisphericLight, Scene, Vector3 } from '@baby
 import * as React from 'react';
 import GeometrySidebar from './GeometryGeneration/GeometrySidebar';
 import SceneComponent from './Scene';
+import { MeshType } from '../enums';
 
 export const CUSTOM_SHADER_NAME = 'customShaderName';
 
@@ -19,13 +20,13 @@ const onSceneReady = (scene: Scene, canvas: HTMLCanvasElement) => {
 const onRender = (scene: Scene) => {};
 
 const Renderer: React.FC = () => {
-  const [positions, setPositions] = React.useState<Vector3[]>();
+  const [mesh, setMesh] = React.useState<MeshType>();
 
   return (
     <div>
       <SceneComponent
         antialias
-        positions={positions}
+        mesh={mesh}
         onSceneReady={onSceneReady}
         onRender={onRender}
         id='babylon-canvas'
@@ -33,7 +34,7 @@ const Renderer: React.FC = () => {
         adaptToDeviceRatio={undefined}
         sceneOptions={undefined}
       />
-      <GeometrySidebar setPositions={setPositions} />
+      <GeometrySidebar setMesh={setMesh} />
     </div>
   );
 };
