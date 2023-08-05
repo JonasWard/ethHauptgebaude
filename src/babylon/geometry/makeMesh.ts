@@ -9,3 +9,7 @@ export const addMeshToScene = (mesh: MeshType, scene: Scene) => {
   vertexData.applyToMesh(babylonMesh, true);
   babylonMesh.convertToFlatShadedMesh();
 };
+
+const invertFace = (face: [number, number, number] | [number, number, number, number]) =>
+  face.slice().reverse() as [number, number, number] | [number, number, number, number];
+export const invertFaces = (mesh: MeshType) => (mesh.faces = mesh.faces.map(invertFace));
