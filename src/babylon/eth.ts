@@ -32,6 +32,8 @@ const mainProfileFromRhinoValuesA = [
   [-305.45912794536747, 145.0919023570518],
   [-300.78237698322283, 145.0919023570518],
   [-298.6533790884623, 153.40463619222353],
+];
+const mainProfileFromRhinoValuesB = [
   [-298.6533790884623, 283.3981785176454],
   [-298.6533790884623, 283.3981785176454],
   [-298.6533790884623, 291.0492454796315],
@@ -70,7 +72,7 @@ const mainProfileFromRhinoValuesA = [
   [-238.95777450591277, 470.00515424819537],
   [-227.6704804281361, 470.00515424819537],
 ];
-const mainProfileFromRhinoValuesB = [
+const mainProfileFromRhinoValuesC = [
   [-47.84044739232047, 650.8848837758551],
   [-47.84044739232047, 659.5556984445145],
   [-46.242071707168634, 661.2355353375773],
@@ -108,15 +110,28 @@ const mainProfileFromRhinoValuesB = [
   [0.0, 799.8451722213272],
 ];
 
-const mainProfileFromRhino = (xDir: Vector3, zDir: Vector3): Vector3[] => {
-  const psA = mainProfileFromRhinoValuesA.map(([x, y]) => xDir.scale(x).add(zDir.scale(y)));
+const joinMesh = (meshA: MeshType, meshB: MeshType): MeshType => {
+  const mesh: MeshType = { positions: [], faces: [] };
+  mesh.positions = [...meshA.positions, ...meshB.positions];
+  mesh.faces = [
+    ...meshA.faces,
+    ...(meshB.faces.map((f) => f.map((i) => i + meshA.positions.length)) as ([number, number, number] | [number, number, number, number])[]),
+  ];
+
+  return mesh;
+};
+
+const mainProfileFromRhinoBottom = (xDir: Vector3, zDir: Vector3): Vector3[] => mainProfileFromRhinoValuesA.map(([x, y]) => xDir.scale(x).add(zDir.scale(y)));
+
+const mainProfileFromRhinoTop = (xDir: Vector3, zDir: Vector3): Vector3[] => {
   const psB = mainProfileFromRhinoValuesB.map(([x, y]) => xDir.scale(x).add(zDir.scale(y)));
+  const psC = mainProfileFromRhinoValuesC.map(([x, y]) => xDir.scale(x).add(zDir.scale(y)));
 
-  const domeOrigin = xDir.scale(mainProfileFromRhinoValuesB[0][0]).add(zDir.scale(mainProfileFromRhinoValuesA[mainProfileFromRhinoValuesA.length - 1][1]));
-  const domeXDir = psA[psA.length - 1].subtract(domeOrigin);
-  const domeYDir = psB[0].subtract(domeOrigin);
+  const domeOrigin = xDir.scale(mainProfileFromRhinoValuesC[0][0]).add(zDir.scale(mainProfileFromRhinoValuesB[mainProfileFromRhinoValuesB.length - 1][1]));
+  const domeXDir = psB[psB.length - 1].subtract(domeOrigin);
+  const domeYDir = psC[0].subtract(domeOrigin);
 
-  return [...psA, ...interpolateArc(domeOrigin, domeXDir, domeYDir), ...psB];
+  return [...psB, ...interpolateArc(domeOrigin, domeXDir, domeYDir), ...psC];
 };
 
 const mainProfile = (xDir: Vector3, zDir: Vector3): Vector3[] => {
@@ -171,7 +186,8 @@ const loftProfiles = (positions: Vector3[][], close: boolean = true): MeshType =
 };
 
 export const ethMeshRhino = (): MeshType => {
-  const profiles: Vector3[][] = [];
+  const profilesA: Vector3[][] = [];
+  const profilesB: Vector3[][] = [];
 
   const divs = 24;
   const angleStep = (2 * Math.PI) / divs;
@@ -179,10 +195,18 @@ export const ethMeshRhino = (): MeshType => {
     const angle = angleStep * i;
     const xDir = new Vector3(Math.cos(angle), 0, Math.sin(angle));
     const zDir = new Vector3(0, 1, 0);
-    profiles.push(mainProfileFromRhino(xDir, zDir));
+    profilesA.push(mainProfileFromRhinoBottom(xDir, zDir));
+    profilesB.push(mainProfileFromRhinoTop(xDir, zDir));
+    const angleBis = angleStep * (i + 0.15);
+    const xDirBis = new Vector3(Math.cos(angleBis), 0, Math.sin(angleBis));
+    profilesA.push(mainProfileFromRhinoBottom(xDir, zDir));
+    profilesB.push(mainProfileFromRhinoTop(xDirBis, zDir));
   }
 
-  const mesh = loftProfiles(profiles, true);
+  const meshA = loftProfiles(profilesA, true);
+  const meshB = loftProfiles(profilesB, true);
+
+  const mesh = joinMesh(meshA, meshB);
   invertFaces(mesh);
 
   return mesh;
