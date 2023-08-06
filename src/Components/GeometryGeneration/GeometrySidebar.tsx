@@ -3,6 +3,7 @@ import { Button } from 'antd';
 import * as React from 'react';
 import { EXAMPLE_CUBE, EXAMPLE_QUAD, EXAMPLE_TRIANGLE, MeshType } from '../../enums';
 import { ethMesh, ethMeshRhino } from '../../babylon/eth';
+import './sidebar.css';
 
 const width = 150;
 const buttonMargin = 2;
@@ -15,13 +16,10 @@ const commonStyle: React.CSSProperties = {
   left: 0,
   top: 0,
 };
-const rightSideBarButton = {
+const rightSidedarButtonLocal = {
   width: `${width - buttonMargin * 4}px`,
   margin: `${buttonMargin * 3}px ${buttonMargin}px ${buttonMargin * 1.5}px ${buttonMargin * 1.5}px`,
   height: `${buttonH}px`,
-  overflow: 'hidden',
-  border: 'none',
-  boxShadow: '0px 0px 5px 2.5px lightgray',
 };
 
 export interface IGeometrySidebarProps {
@@ -69,21 +67,21 @@ const GeometrySidebar: React.FC<IGeometrySidebarProps> = ({ setMesh }) => {
       </button>
 
       <div style={isVisible ? visibleStyle : invisibleStyle}>
-        <Button style={rightSidebarStyle} onClick={() => setMesh(EXAMPLE_TRIANGLE)}>
+        <button style={rightSidedarButtonLocal} className='rightSidedarButton' onClick={() => setMesh(EXAMPLE_TRIANGLE)}>
           add tri
-        </Button>
-        <Button style={rightSidebarStyle} onClick={() => setMesh(EXAMPLE_QUAD)}>
+        </button>
+        <button style={rightSidedarButtonLocal} className='rightSidedarButton' onClick={() => setMesh(EXAMPLE_QUAD)}>
           add quad
-        </Button>
-        <Button style={rightSidebarStyle} onClick={() => setMesh(EXAMPLE_CUBE)}>
+        </button>
+        <button style={rightSidedarButtonLocal} className='rightSidedarButton' onClick={() => setMesh(EXAMPLE_CUBE)}>
           add cube
-        </Button>
-        <Button style={rightSidebarStyle} onClick={() => setMesh(ethMeshRhino())}>
+        </button>
+        <button style={rightSidedarButtonLocal} className='rightSidedarButton' onClick={() => setMesh(ethMeshRhino())}>
           add eth rhino
-        </Button>
-        <Button style={rightSidebarStyle} onClick={() => setMesh(ethMesh())}>
+        </button>
+        <button style={rightSidedarButtonLocal} className='rightSidedarButton' onClick={() => setMesh(ethMesh())}>
           add eth parametric
-        </Button>
+        </button>
       </div>
     </>
   );
